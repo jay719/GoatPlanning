@@ -1,27 +1,27 @@
 import React, { useEffect, useState }from 'react'
 import { ScrollView, Text, StyleSheet, View, Dimensions, Button} from 'react-native'
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Circle, Marker } from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons'; 
-import { useSelector } from 'react-redux'
-// const dispatch = useDispatch();
+
+
 
 
 export default function MapScreen({navigation}) {
-
+    const dispatch = useDispatch();
     const [latitude, setMarkerLat] = useState('')
     const [longitude, setMarkerLong] = useState('')
-    const [latitudeInputText, setLatitude] = useState('')
-    const [longitudeInputText, setLongitude] = useState('')
+    
     const [tripName, setTripName] = useState('')
     
     
     const startDate = useSelector(state => state.start)
     const endDate = useSelector(state => state.end)
 
-    console.log(startDate)
-    console.log(endDate)
+    
+
+   
     const handleMapPress = (e) => {
         const lat = e.nativeEvent.coordinate.latitude;
         const fLat = lat.toFixed(3);
@@ -31,28 +31,25 @@ export default function MapScreen({navigation}) {
         
         setMarkerLat(fLat);
         setMarkerLong(fLong)
-        
-        
 
+        
     
     }
     
-    const handleLatitudeText = (text) => { //usually would be event and event.target.value
-        setLatitude(text)
-        console.log(latitudeInputText)
-    }
-    const handleLongitudeText = (text) => { //usually would be event and event.target.value
-        setLongitude(text)
-    }
+
     const handleTripName = (text) => { //usually would be event and event.target.value
-        setTripName(text)
+        setTripName(text);
+        dispatch({type:"SET_NAME", name: tripName})
     }
-    const handleStartDate = (text) => { //usually would be event and event.target.value
-        setStartDate(text)
-    }
+
 
     const handleSubmit = () => {
-        console.log(hi)
+        dispatch({type:"SET_LATITUDE", latitude: latitude})
+        dispatch({type:"SET_LONGITUDE", longitude: longitude})
+        dispatch({type:"SET_NAME", name: tripName})
+        
+
+        navigation.navigate("Set Date")
     }    
 
     return (
@@ -70,6 +67,7 @@ export default function MapScreen({navigation}) {
                         title={`Latitude:${latitude} Longitude:${longitude}`}
                         description="Add Your Next Destination Using the Forum Below"
                     />
+             <Circle fillColor= "hsl(155, 100%, 84%)"radius={200} center={{latitude: 38.846127, longitude:-104.800644,}} />
                 </MapView>
             </View>
             <View style={styles.text}>
@@ -84,21 +82,8 @@ export default function MapScreen({navigation}) {
                     value={tripName}
                     />
                     <Text> Location:</Text>
-                    <TextInput
-                        style={styles.search}
-                        placeholder="Enter Latitude"
-                        onChangeText={handleLatitudeText}
-                        value={latitudeInputText}
-                        keyboardType="decimal-pad"
-                    />
-                    <TextInput
-                    style={styles.search}
-                    placeholder="Enter Longitude"
-                    onChangeText={handleLongitudeText}
-                    value={longitudeInputText}
-                    keyboardType="decimal-pad"
-
-                    />
+                    <Text style={styles.coord}>Latitude: {latitude}</Text>
+                    <Text style={styles.coord}>Longitude: {longitude}</Text>
                     
                     <TouchableOpacity 
                         style={styles.touchable}
@@ -109,10 +94,9 @@ export default function MapScreen({navigation}) {
                     <Text style={styles.coord}> Start Date: {startDate}</Text>
                     <Text style={styles.coord}> End Date: {endDate}</Text>
                     
-                    <Button 
-                        style={styles.button}
+                    <Button
                         onPress={handleSubmit}
-                        title='Spawn Marker And Set Trip'
+                        title='Set Marker And Set Trip'
                     />
                     
                 </ScrollView>

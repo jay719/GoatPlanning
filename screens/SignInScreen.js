@@ -3,8 +3,6 @@ import React,  { useState} from 'react'
 import {ImageBackground, SafeAreaView, StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal} from "react-native" //safe area makes sure content is under tool bar
 
 
-
-
 export default function SignInScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);

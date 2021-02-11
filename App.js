@@ -12,6 +12,8 @@ import MapScreen from './screens/MapScreen.js'
 import FavoritesScreen from './screens/FavoritesScreen.js'
 import SignInScreen from './screens/SignInScreen.js'
 import LostFriend from './screens/LostFriend.js'
+import SelectorScreen from './screens/SelectorScreen.js'
+import FinalizeScreen from './screens/FinalizeScreen.js'
 import { Feather } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -43,7 +45,7 @@ export default function App() {
               })}
             />
             <HomeStack.Screen 
-              name="TripPlanner" 
+              name="Trip Planner" 
               component={TripStackScreens}
               
             />
@@ -52,7 +54,16 @@ export default function App() {
               component={CalendarScreen}
               
             />
-          
+            <HomeStack.Screen 
+              name="Set Date" 
+              component={SelectorScreen}
+              
+            />
+            <HomeStack.Screen 
+              name="Finalize Trip" 
+              component={FinalizeScreen}
+              
+            />
             
           </HomeStack.Navigator>
         </NavigationContainer>
@@ -106,9 +117,8 @@ const  TripStackScreens = () => {
       inactiveTintColor: 'gray',
     }}    
     >
-
-      <TripTabs.Screen name = "Favorites" component = {FavoritesScreen} />
       <TripTabs.Screen name = "Map" component = {MapScreen} />
+      <TripTabs.Screen name = "Favorites" component = {FavoritesScreen} />
       <TripTabs.Screen name = "Lost" component = {LostFriend} />
     </TripTabs.Navigator>
   );
@@ -120,7 +130,7 @@ const  TripStackScreens = () => {
 const MapHeader = (props) => {
   return (<TouchableOpacity 
             style={styles.touchable}
-            onPress={() => props.navigation.navigate("TripPlanner")}
+            onPress={() => props.navigation.navigate("Trip Planner")}
           >
             <AntDesign name="stepforward" size={24} color="black" />
           </TouchableOpacity>)

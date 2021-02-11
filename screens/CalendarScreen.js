@@ -20,7 +20,7 @@ export default function CalendarScreen({navigation}) {
     const handleClick = () => {
         dispatch({type:"SET_START", start: selectedStartDate.toString()});
         dispatch({type:"SET_END", end: selectedEndDate.toString()});
-        // navigation.navigate("Map")
+        navigation.navigate("Map")
         
     }
 
