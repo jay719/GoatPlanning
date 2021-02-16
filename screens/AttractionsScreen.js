@@ -15,10 +15,8 @@ export default function AttractionsScreen({navigation}) {
     const tripName = useSelector(state => state.generatedRestaurants)
 
 
-    const generatedEvents = useSelector(state => state.generatedEvents)
-    const [generatedFood, setGeneratedFood] = useState([])
-
    
+    const [generatedFood, setGeneratedFood] = useState([])
 
     const [userInput, setUserInput] = useState([])
     
@@ -30,25 +28,11 @@ export default function AttractionsScreen({navigation}) {
         }
 
     const apiKey = "eg8UB2Lxa0g8XZrt2PAAppo8EinYYmpw"
-    // const eventURL = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&latitude=${tripLat}&lon=${tripLong}`
     const foodURL = `https://developers.zomato.com/api/v2.1/geocode?lat=${tripLat}&lon=${tripLong}`
 
     
         
-    // const loadEvents = () => {
-    //     fetch(eventURL, {
-    //         headers: {
-    //         "apikey": `${apiKey}`
-    //         }
-    //     })
-    //     .then(parseJSON) 
-    //     .then(eventsObject => {
-    //         const events = eventsObject._embedded.events
-    //         dispatch({type:"SET_GENERATED_EVENTS", events: events})
-    //             console.log(apiURL)
-    //         })
-    //     .then(spawnEvents)
-    // }
+   
 
     const loadRestaurants = () => {
         fetch(foodURL, {
@@ -112,25 +96,6 @@ export default function AttractionsScreen({navigation}) {
             return foodMarkers
         }
 
-        
-    
-    // const spawnEvents = () => {
-    //     const eventMarks = generatedEvents.map((event, i) => {
-    //         const eventLat = Number(event._embedded.venues[0].location.latitude);
-    //         const eventLong = Number(event._embedded.venues[0].location.longitude);
-
-    //         console.log(eventLat, eventLong, event)
-    //         return  <Marker
-    //             key={event.id}
-    //             coordinate={{latitude: eventLat, longitude: eventLong,}}
-    //             title="hi"
-    //             description={` name: ${event.name} lattitude: ${eventLat}, long: ${eventLong}`}
-    //             image={foodMarker}
-    //         /> 
-    //         }
-    //     )
-    //     return eventMarks
-    // }
 
 
 function parseJSON(response){

@@ -42,22 +42,7 @@ const end = (state='', action) => {
             return state
     }
 }
-const selectedEvents = (state='', action) => {
-    switch(action.type){
-        case "SET_TRIP_ID":
-            return [...state, action.tripEvents]
-        default:
-            return state
-    }
-}
-const generatedEvents = (state=[], action) => {
-    switch(action.type){
-        case"SET_GENERATED_EVENTS":
-            return action.events
-        default:
-            return state
-    }
-}
+
 const generatedRestaurants = (state=[],action) => {
     switch(action.type){
         case"SET_GENERATED_RESTAURANTS":
@@ -114,10 +99,8 @@ export default combineReducers({
     start,
     end,
     tripName,                  
-    generatedEvents,
     generatedRestaurants,
     generatedUserTrips,
-    selectedEvents,
     currentUser,
     currentUserID,
     tripDescription,
