@@ -6,7 +6,7 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 
 
-export default function SignInScreen() {
+export default function SignInScreen({navigation}) {
     const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
     const [usernameValue, setUsernameValue] = useState('');
@@ -89,6 +89,7 @@ spawnLogInMessage = () => {
 
                                         })
                                         .then(setModalVisible(false))
+                                        .then(navigation.navigate("Trip Planner"))
                                         
                                 }}
                                 >

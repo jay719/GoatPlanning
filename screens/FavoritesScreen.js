@@ -27,13 +27,14 @@ export default function FavoritesScreen({navigation}) {
     const startDate = useSelector(state => state.start)
     const endDate = useSelector(state => state.end)
 
-    const userDescription = useSelector(state => state.userDescription)
+    const userDescription = useSelector(state => state.tripDescription)
 
     const events =  useSelector(state => state.tripEvents)
-    const icon = useSelector(state=> state.currentIcon)
+    const icon = useSelector(state => state.currentIcon)
 
     const [toggleFinish, setFinishToggle] = useState(true);
     const [categoryToggle, setCategoryToggle] = useState(true);
+    const [toggleConfirm, setConfirmToggle] = useState(true);
 
     const [selectableFriends, setSelectableFriends] = useState([])
     const [selectedFriendID, setSelectedFriendID] = useState([])
@@ -58,19 +59,11 @@ function parseJSON(response){
 
 //   }
     
-    const spawnFriends = () => {
-        console.log("Starting")
-        const friendOptions = selectableFriends.map(friend => {
-            const friendName = friend.username
-            const friendId = friend.id
-            const friendPhrase = `${friendId}: ${friendName}`
-                return <Picker.Item label={friendPhrase} value={friendId} />
-        })
-        return friendOptions
-    }
+   
 
     const toggleCategory = () => {
         setCategoryToggle(!categoryToggle)
+        dispatch({type:"SET_ICON", icon: iconVariable})
     }
     
     const showIcon = () => {
@@ -90,11 +83,20 @@ function parseJSON(response){
     }
     const handleDescription = (text) => { 
         setTripDescription(text);
+        
+    }
+
+    const confirmAnswers = () => {
+        setConfirmToggle(!toggleConfirm)
+        dispatch({type:"SET_ICON", icon: iconVariable})
         dispatch({type:"SET_DESCRIPTION", description: tripDescription})
+        console.log(userDescription,icon,)
     }
 
     const postTrip = () => {
-        dispatch({type:"SET_ICON", icon: iconVariable})
+        
+        dispatch({type:"SET_DESCRIPTION", description: tripDescription})
+        console.log(tripName, startDate,endDate,tripLat,tripLong,currentUserID, selectedFriendID,userDescription,icon,)
         fetch(tripsURL, {
             method: "POST",
             headers: {
@@ -111,16 +113,16 @@ function parseJSON(response){
                 user_id: currentUserID,
                 friend_id: selectedFriendID,
                 description: userDescription,
-                icon: iconVariable,
+                icon: icon,
                 
 
 
             }), 
         }
         )
-        .then(setFinishToggle(!toggleCategory))
-        .then(response => response.json())
-        .then(response => console.log(response))
+        .then(parseJSON)
+        .then(showUserTrips)
+        .then(setFinishToggle(!toggleFinish))
         
 
     } 
@@ -148,8 +150,20 @@ function parseJSON(response){
             .then(spawnFriends)
 
     }
+
+    const spawnFriends = () => {
+        console.log("Starting")
+        const friendOptions = selectableFriends.map(friend => {
+            const friendName = friend.username
+            const friendId = friend.id
+            const friendPhrase = `${friendId}: ${friendName}`
+                return <Picker.Item label={friendPhrase} value={friendId} />
+        })
+        return friendOptions
+    }
+
     const showUserTrips = () => {
-        fetch(`usersURL/:${userID}`)
+        fetch(`${usersURL}/${currentUserID}`)
         .then(parseJSON)
         .then(userTrips => {
             const filteredTrips = userTrips.trips
@@ -164,12 +178,14 @@ function parseJSON(response){
 
     const z = 0
     const spawnUserTrips = () => {
+        
         const userCards = generatedUserTrips.map((trip)=>{
             return <TripCard 
             trip={trip}
             key={z+1}
             />
-        })
+            })
+        return userCards
     }
     const location = `${tripLat},${tripLong}`
     return (
@@ -195,7 +211,7 @@ function parseJSON(response){
                                 <Text>Upcoming Memories:</Text>
                                 </TouchableOpacity>
                                 <View>
-                                    {/* {showUserTrips()} */}
+                                    {showUserTrips()}
                                 </View>
                             </ScrollView>
 
@@ -209,7 +225,7 @@ function parseJSON(response){
                                     <View>
                                             <Text style={styles.categories} onPress={toggleCategory}>Select Category Below: </Text> 
                                             <Text style={styles.selectedCategory}>{iconVariable} {showIcon()}</Text>
-                                        {categoryToggle ? <Text onPress={toggleCategory} style={{fontWeight:"200", fontSize:"18"}}>Choose your category by clicking here!</Text> :
+                                        {categoryToggle ? <Text onPress={toggleCategory} style={{fontWeight:"200", fontSize:18}}>Choose your category by clicking here!</Text> :
                                         <View>
                                             <TouchableOpacity style={styles.icons}onPress={() => setIconVariable("Road-trip:")}>
                                                 <MaterialCommunityIcons name="car-convertible" size={24} color="black" />
@@ -242,19 +258,25 @@ function parseJSON(response){
                                         {spawnFriends()}
                                     </Picker>
                                     <Text style={styles.description}>Add a Description of Your Trip Below:</Text>
+                                    
                                     <TextInput
                                         style={styles.descriptionInput}
                                         placeholder="Your Trip's Description"
                                         onChangeText={handleDescription}
                                         value={tripDescription}
-                                    />
-                                        <TouchableHighlight style={styles.completeButton} onPress={postTrip}>
+                                    />  
+                                        {toggleConfirm ? 
+                                        <TouchableHighlight style={styles.completeButton} onPress={confirmAnswers}>
+                                        <Text>Confirm Answers!</Text>
+                                    </TouchableHighlight> 
+                                    :
+                                    <TouchableHighlight style={styles.completeButton} onPress={postTrip}>
                                             <Text>Complete Trip!</Text>
-                                        </TouchableHighlight>
+                                        </TouchableHighlight>}
                                     
                                 </ScrollView> } 
                     </View>
-               
+
                 
             
             
@@ -262,12 +284,6 @@ function parseJSON(response){
 
     )
 }
-
-// const tripEndDate = trip.endDate
-
-// const showPastEvents = () => {
-//     if (tripEndDate > todaysDate)
-// }
 
 const styles= StyleSheet.create({
     container: {
