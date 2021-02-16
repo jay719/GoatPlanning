@@ -12,7 +12,7 @@ import MapScreen from './screens/MapScreen.js'
 import FavoritesScreen from './screens/FavoritesScreen.js'
 import SignInScreen from './screens/SignInScreen.js'
 import LostFriend from './screens/LostFriend.js'
-import SelectorScreen from './screens/SelectorScreen.js'
+import AttractionsScreen from './screens/AttractionsScreen.js'
 import FinalizeScreen from './screens/FinalizeScreen.js'
 import { Feather } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -21,12 +21,20 @@ import { Ionicons } from '@expo/vector-icons';
 import CalendarScreen from './screens/CalendarScreen.js';
 import { createStore } from 'redux'
 import { Provider} from 'react-redux' 
+import { LogBox } from 'react-native';
 
 const HomeStack = createStackNavigator();
 const TripTabs = createBottomTabNavigator();
 
 const store = createStore(reducers)
 
+
+
+// Ignore log notification by message
+LogBox.ignoreLogs(['Warning: ...']);
+
+//Ignore all log notifications
+LogBox.ignoreAllLogs();
 
 export default function App() {
 
@@ -35,7 +43,7 @@ export default function App() {
     <Provider store={store} >
         <NavigationContainer>
           <HomeStack.Navigator  
-            screenOptions={{ headerStyle: { backgroundColor: 'hsl(155, 100%, 84%)' } }}
+            screenOptions={{ headerStyle: { backgroundColor: 'hsl(181, 59%, 95%)' } }}
           >
             <HomeStack.Screen
               name="SignInScreen"
@@ -56,7 +64,7 @@ export default function App() {
             />
             <HomeStack.Screen 
               name="Set Date" 
-              component={SelectorScreen}
+              component={AttractionsScreen}
               
             />
             <HomeStack.Screen 

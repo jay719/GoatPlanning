@@ -63,9 +63,9 @@ export default function MapScreen({navigation}) {
                     onPress={handleMapPress}
                 >
                     <Marker 
-                        coordinate={{latitude: 	latitude, longitude: longitude,}}
-                        title={`Latitude:${latitude} Longitude:${longitude}`}
-                        description="Add Your Next Destination Using the Forum Below"
+                        coordinate={{latitude: 	Number(latitude), longitude: Number(longitude),}}
+                        description={`Latitude:${latitude} Longitude:${longitude}`}
+                        title="Next: Add Your Trips Name and Date Below!"
                     />
              <Circle fillColor= "hsl(155, 100%, 84%)"radius={200} center={{latitude: 38.846127, longitude:-104.800644,}} />
                 </MapView>
@@ -81,10 +81,6 @@ export default function MapScreen({navigation}) {
                     onChangeText={handleTripName}
                     value={tripName}
                     />
-                    <Text> Location:</Text>
-                    <Text style={styles.coord}>Latitude: {latitude}</Text>
-                    <Text style={styles.coord}>Longitude: {longitude}</Text>
-                    
                     <TouchableOpacity 
                         style={styles.touchable}
                         onPress={() => navigation.navigate("Calendar")}
@@ -95,8 +91,8 @@ export default function MapScreen({navigation}) {
                     <Text style={styles.coord}> End Date: {endDate}</Text>
                     
                     <Button
-                        onPress={handleSubmit}
-                        title='Set Marker And Set Trip'
+                        onPress={handleSubmit}  
+                        title='Check Out Local Establishments And Attractions?'
                     />
                     
                 </ScrollView>
@@ -131,7 +127,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderTopWidth:0, 
         borderRightWidth:0,
-        borderLeftWidth:0
+        borderLeftWidth:0,
     },
     touchable: {
         paddingTop:20,

@@ -1,4 +1,6 @@
 import {combineReducers} from 'redux'
+
+
 const tripName = (state='', action) =>{
     switch(action.type){
         case"SET_NAME":
@@ -48,31 +50,77 @@ const selectedEvents = (state='', action) => {
             return state
     }
 }
-const selectedEventsName = (state='', action) => {
-    switch(action.type){
-        case "SET_EVENT_NAME":
-            return [...state, action.eventName]
-        default:
-            return state
-    }
-}
 const generatedEvents = (state=[], action) => {
     switch(action.type){
         case"SET_GENERATED_EVENTS":
             return action.events
-            default:
-                return state
+        default:
+            return state
+    }
+}
+const generatedRestaurants = (state=[],action) => {
+    switch(action.type){
+        case"SET_GENERATED_RESTAURANTS":
+            return action.food
+        default:
+            return state
+    }
+}
+const generatedUserTrips = (state=[], action) => {
+    switch(action.type){
+        case"SET_GENERATED_TRIPS":
+            return action.trips
+        default:
+            return state
+    }
+}
+const currentUser = (state='', action) => {
+    switch (action.type){
+        case"SET_CURRENT_USER":
+            return action.currentUser
+        default:
+            return state
+    }
+}
+const currentUserID = (state='', action) => {
+    switch (action.type){
+        case"SET_CURRENT_ID":
+            return action.currentID
+        default:
+            return state
+    }
+}
+const currentIcon = (state='', action) => {
+    switch(action.type){
+        case"SET_ICON":
+            return action.icon
+        default:
+            return state
+    }
+}
+const tripDescription = (state='N/A', action) => {
+    switch(action.type){
+        case"SET_DESCRIPTION":
+            return action.description
+        default:
+            return state
     }
 }
 
-export default combineReducers({ //will combine state if i add more then events,
+
+export default combineReducers({ 
     latitude, 
     longitude,
     start,
-    end,                  // events(state): events(reduceer up top), gives STATE of events 
+    end,
+    tripName,                  
     generatedEvents,
-    tripName,
+    generatedRestaurants,
+    generatedUserTrips,
     selectedEvents,
-    selectedEventsName
+    currentUser,
+    currentUserID,
+    tripDescription,
+    currentIcon,
 
 })

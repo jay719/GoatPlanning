@@ -26,7 +26,7 @@ export default function CalendarScreen({navigation}) {
 
 
     const onDateChange = (date, type) => {
-    //function to handle the date change
+        
         if (type === 'END_DATE') {
         setSelectedEndDate(date);
         } else {
@@ -114,17 +114,20 @@ export default function CalendarScreen({navigation}) {
     bigContainer: {
         flex: 1,
         paddingTop: 30,
-        backgroundColor: 'hsl(155, 100%, 84%)',
+        backgroundColor: 'hsl(179, 59%, 86%)',
         padding: 16,
     },
     container: {
         
-        paddingTop: 30,
+        paddingTop: 20,
         backgroundColor: '#ffffff',
-        padding: 16,
+        padding: 1,
+        borderRadius: 10,
+        
     },
     textStyle: {
         marginTop: 10,
+        
     },
     titleStyle: {
         textAlign: 'center',
