@@ -11,7 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapScreen from './screens/MapScreen.js'
 import FavoritesScreen from './screens/FavoritesScreen.js'
 import SignInScreen from './screens/SignInScreen.js'
-import LostFriend from './screens/LostFriend.js'
+import CameraScreen from './screens/CameraScreen.js'
 import AttractionsScreen from './screens/AttractionsScreen.js'
 import FinalizeScreen from './screens/FinalizeScreen.js'
 import { Feather } from '@expo/vector-icons'; 
@@ -53,7 +53,7 @@ export default function App() {
               })}
             />
             <HomeStack.Screen 
-              name="Trip Planner" 
+              name="G.O.A.T Planning" 
               component={TripStackScreens}
               
             />
@@ -107,7 +107,7 @@ const  TripStackScreens = () => {
               color={color} />
           );
         }
-          else if (route.name === 'Lost'){
+          else if (route.name === 'Camera'){
             return (
               <Feather name={
                   focused
@@ -127,7 +127,7 @@ const  TripStackScreens = () => {
     >
       <TripTabs.Screen name = "Map" component = {MapScreen} />
       <TripTabs.Screen name = "Favorites" component = {FavoritesScreen} />
-      <TripTabs.Screen name = "Lost" component = {LostFriend} />
+      <TripTabs.Screen name = "Camera" component = {CameraScreen} />
     </TripTabs.Navigator>
   );
 }
@@ -138,7 +138,7 @@ const  TripStackScreens = () => {
 const MapHeader = (props) => {
   return (<TouchableOpacity 
             style={styles.touchable}
-            onPress={() => props.navigation.navigate("Trip Planner")}
+            onPress={() => props.navigation.navigate("G.O.A.T Planning")}
           >
             <AntDesign name="stepforward" size={24} color="black" />
           </TouchableOpacity>)

@@ -115,7 +115,7 @@ function parseJSON(response){
                 <Button
                 
                 title="Spawn Events"
-                onPress={loadEvents}
+                onPress={() => console.log('oops')}
                 >
 
                 </Button>
@@ -135,7 +135,6 @@ function parseJSON(response){
                     
                 >
                     {spawnFood()}
-                    {spawnEvents()}
                     
                     <Marker 
                         coordinate={{latitude: 	Number(tripLat), longitude: Number(tripLong),}}
@@ -156,7 +155,7 @@ function parseJSON(response){
 const styles = StyleSheet.create({
     container: {
         flex:1,
-        backgroundColor: 'hsl(181, 59%, 88%)',
+        backgroundColor: 'hsl(181, 59%, 96%)',
     },
     mapContainer:{
         height: "40%",

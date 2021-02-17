@@ -72,10 +72,11 @@ export default function CalendarScreen({navigation}) {
                     'November',
                     'December',
                 ]}
+                
                 previousTitle="Previous"
                 nextTitle="Next"
-                todayBackgroundColor="#e6ffe6"
-                selectedDayColor="#66ff33"
+                todayBackgroundColor = "hsl(181, 59%, 97%)"
+                selectedDayColor = "hsl(181, 59%, 94%)"
                 selectedDayTextColor="#000000"
                 scaleFactor={375}
                 textStyle={{
@@ -114,7 +115,7 @@ export default function CalendarScreen({navigation}) {
     bigContainer: {
         flex: 1,
         paddingTop: 30,
-        backgroundColor: 'hsl(179, 59%, 86%)',
+        backgroundColor: 'hsl(181, 59%, 96%)',
         padding: 16,
     },
     container: {

@@ -73,7 +73,7 @@ export default function MapScreen({navigation}) {
             <View style={styles.text}>
                 <ScrollView >
                 
-                    <Text>Create Trip</Text>
+                    <Text style={styles.coord}>Trip Name</Text>
                     
                     <TextInput
                     style={styles.search}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     },
     search: { 
         left:10,
-        height: 40, 
+        height: 50, 
         flex: 1,
         borderColor: 'gray', 
         borderWidth: 1, 
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     },
     coord: {
         padding:10,
+        fontSize:20
     }
     });
 

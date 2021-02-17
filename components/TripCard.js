@@ -1,34 +1,45 @@
-import React from 'react'
-import { Image, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { Image, Modal, StyleSheet, Text, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 
 
 export default function TripCard({trip}) {
 
+        const [modalVisible, setModalVisible] = useState(false)
         const showIcon = () => {
+            // console.log("tripcard")
             if (trip.icon == "Road-trip:"){
                 return <MaterialCommunityIcons name="car-convertible" size={24} color="green" style={styles.choiceIcon}/> 
-            } else if (iconVariable == "Date:"){
+            } else if (trip.icon == "Date:"){
                 return <Fontisto name="heart-alt" size={24} color="green" style={styles.choiceIcon}/>
-            } else if (iconVariable == "Food:") {
+            } else if (trip.icon == "Food:") {
                 return  <Ionicons name="fast-food-outline" size={24} color="green" style={styles.choiceIcon}/>
-            }else if (iconVariable == "Hike:"){
+            }else if (trip.icon == "Hike:"){
                 return <FontAwesome5 name="mountain" size={24} color="green" style={styles.choiceIcon}/>
-            } else if(iconVariable == "Other:"){
+            } else if(trip.icon == "Other:"){
                 return  <FontAwesome name="question-circle" size={24} color="green" style={styles.choiceIcon} />
             }
             else return <Text>"N/A"</Text>
-    
+           
         } 
+        
+        const viewTrip = () => {
+            setModalVisible(!modalVisible)
     
+        }
+        
     return (
         <View style={styles.container}>
+            
             <View style={styles.header}>
                 {showIcon()}
-                <Text>{trip.name}-{trip.description}</Text>
+                <Text style={styles.name}>{trip.name}-{trip.description}</Text>
                 <View>
-                    <Image source={require('../assets/16.png')}/>
                     <Text>Friends:{trip.friend}</Text>
+                    <TouchableOpacity onPress={viewTrip}>
+                        <Text>View</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -36,3 +47,15 @@ export default function TripCard({trip}) {
 }
 
 
+const styles = StyleSheet.create({
+    container:{
+        flex:1
+    },
+    header: {
+        display:"flex",
+    },
+    name: {
+        fontWeight:"300"
+    }
+
+})

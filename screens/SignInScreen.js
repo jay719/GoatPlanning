@@ -12,6 +12,9 @@ export default function SignInScreen({navigation}) {
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
 
+    const [toggleSignInMessage, settoggleSignInMessage] = useState(true)
+
+
 const handleUsernameText = (text) => {
     setUsernameValue(text)
 }
@@ -20,7 +23,7 @@ const handlePasswordText = (text) => {                //usually would be event a
 }   
 
 spawnLogInMessage = () => {
-    return <Text>Success!!</Text>
+    settoggleSignInMessage(!toggleSignInMessage)
 }
     return (
         
@@ -29,8 +32,7 @@ spawnLogInMessage = () => {
             source={require('../assets/roadtrip.png')}
             >
                   <View style={styles.welcome}>
-                        <Text style={styles.welcomeText}> Trip Plauner</Text>
-                        <Text style={styles.welcomeHiText}>Mobile</Text>
+                      <Image source={require('../assets/goatmaps.png')} style={styles.image}/>
                     </View>
                 <Modal
                     animationType="slide"
@@ -42,15 +44,20 @@ spawnLogInMessage = () => {
                     >
                         <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Please Sign in Below</Text>
+                            <Text style={styles.modalText}>Please Sign in:</Text>
                             <TextInput
-                            style={{ borderColor: 'gray', borderWidth: 1, margin:20, }}
+                            style={{ borderColor: 'gray', borderWidth: 1, margin:20, height:28 }}
                             onChangeText={handleUsernameText}
                             value={usernameValue}
                             placeholder="Username"
                             />
+                            {toggleSignInMessage ? 
+                                <Text></Text>
+                                :
+                                <Text>Signed In!!</Text>
+                            }
                              <TextInput
-                                style={{ borderColor: 'gray', borderWidth: 1, margin:20,}}
+                                style={{ borderColor: 'gray', borderWidth: 1, margin:20, height:28}}
                                 secureTextEntry={true}
                                 onChangeText={handlePasswordText}
                                 value={passwordValue}
@@ -125,7 +132,8 @@ const styles = StyleSheet.create({
     },
     welcome:{
         flex: 1,
-        top: 290
+        top:"50%",
+        left:"50%"
     },
     welcomeText: {
         left: 30,
@@ -152,10 +160,6 @@ const styles = StyleSheet.create({
         textShadowColor: "black",
         textShadowOffset: {width: 1, height: 1},
         textShadowRadius: 2,
-        
-    },container: {
-        flex: 1,
-        backgroundColor:'hsl(160, 100%, 98%)',
         
     },
     centeredView: {
@@ -234,6 +238,13 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         fontWeight:'200',
+        fontSize:23
+    },
+    modalText: {
+        fontSize:23,
+    },
+    image: {
+        height:100,
+        width: 150
     }
-    
 })

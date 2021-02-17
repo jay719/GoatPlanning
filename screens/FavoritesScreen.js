@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Button, ImageBackground, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler'
 import {Picker} from '@react-native-picker/picker';
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,10 +12,10 @@ import { TextInput } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons'; 
 
 
-
 export default function FavoritesScreen({navigation}) {
     const dispatch = useDispatch();
-    const currentUserID = useSelector(state => state.currentUserID)
+    // const currentUserID = useSelector(state => state.currentUserID)
+    const currentUserID = 1
     const currentUser = useSelector(state => state.currrentUser)
     const userTrips = useSelector(state => state.generatedUserTrips )
 
@@ -179,7 +179,8 @@ function parseJSON(response){
     const z = 0
     const spawnUserTrips = () => {
         
-        const userCards = generatedUserTrips.map((trip)=>{
+        console.log('working')
+        const userCards = userTrips.map((trip)=>{
             return <TripCard 
             trip={trip}
             key={z+1}
@@ -211,7 +212,7 @@ function parseJSON(response){
                                 <Text>Upcoming Memories:</Text>
                                 </TouchableOpacity>
                                 <View>
-                                    {showUserTrips()}
+                                    {spawnUserTrips()}
                                 </View>
                             </ScrollView>
 
