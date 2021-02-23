@@ -18,8 +18,14 @@ export default function CalendarScreen({navigation}) {
     const endDate = useSelector(state => state.end)
     
     const handleClick = () => {
-        dispatch({type:"SET_START", start: selectedStartDate.toString()});
-        dispatch({type:"SET_END", end: selectedEndDate.toString()});
+        
+        
+
+        
+        
+
+        dispatch({type:"SET_START", start: selectedStartDate});
+        dispatch({type:"SET_END", end: selectedEndDate });
         navigation.navigate("Map")
         
     }
@@ -28,10 +34,14 @@ export default function CalendarScreen({navigation}) {
     const onDateChange = (date, type) => {
         
         if (type === 'END_DATE') {
-        setSelectedEndDate(date);
+            const endString = date.toString();
+            const end = endString.split('12:00:00')[0]
+            setSelectedEndDate(end);
         } else {
+        const startString = date.toString();
+        const start = startString.split('12:00:00')[0];
         setSelectedEndDate(null);
-        setSelectedStartDate(date);
+        setSelectedStartDate(start);
         }
     };
 
@@ -90,13 +100,13 @@ export default function CalendarScreen({navigation}) {
                         Selected Start Date :
                     </Text>
                     <Text style={styles.textStyle}>
-                        {selectedStartDate ? selectedStartDate.toString() : ''}
+                        {selectedStartDate ? selectedStartDate: ''}
                     </Text>
                     <Text style={styles.textStyle}>
                         Selected End Date :
                     </Text>
                     <Text style={styles.textStyle}>
-                        {selectedEndDate ? selectedEndDate.toString() : ''}
+                        {selectedEndDate ? selectedEndDate : ''}
                     </Text>
                     <Button 
                         style={styles.button}

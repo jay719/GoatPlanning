@@ -51,15 +51,15 @@ const generatedRestaurants = (state=[],action) => {
             return state
     }
 }
-const generatedUserTrips = (state=[], action) => {
+const generatedUserObject = (state=[], action) => {
     switch(action.type){
-        case"SET_GENERATED_TRIPS":
-            return action.trips
+        case"SET_GENERATED_USER":
+            return action.userObject
         default:
             return state
     }
 }
-const currentUser = (state='', action) => {
+const currentUser = (state="", action) => {
     switch (action.type){
         case"SET_CURRENT_USER":
             return action.currentUser
@@ -67,7 +67,7 @@ const currentUser = (state='', action) => {
             return state
     }
 }
-const currentUserID = (state='', action) => {
+const currentUserID = (state="", action) => {
     switch (action.type){
         case"SET_CURRENT_ID":
             return action.currentID
@@ -75,7 +75,7 @@ const currentUserID = (state='', action) => {
             return state
     }
 }
-const currentIcon = (state='', action) => {
+const currentIcon = (state="", action) => {
     switch(action.type){
         case"SET_ICON":
             return action.icon
@@ -91,8 +91,22 @@ const tripDescription = (state='N/A', action) => {
             return state
     }
 }
-
-
+const tripRestaurants = (state=[],action) => {
+    switch(action.type){
+        case"SET_FOOD":
+            return [...state, action.food]
+        default:
+            return state
+    }
+}
+const tripPhoto = (state='N/A', action) => {
+    switch(action.type){
+        case"SET_PHOTO":
+            return action.trip
+        default:
+            return state
+    }
+}
 export default combineReducers({ 
     latitude, 
     longitude,
@@ -100,10 +114,11 @@ export default combineReducers({
     end,
     tripName,                  
     generatedRestaurants,
-    generatedUserTrips,
+    generatedUserObject,
     currentUser,
     currentUserID,
     tripDescription,
     currentIcon,
-
+    tripPhoto,
+    tripRestaurants
 })

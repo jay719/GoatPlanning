@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, StyleSheet, Text, View, Dimensions, Image } from 'react-native'
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import EventCard from '../components/EventCard.js';
@@ -17,6 +17,7 @@ export default function AttractionsScreen({navigation}) {
 
    
     const [generatedFood, setGeneratedFood] = useState([])
+    const [completeToggle, setCheckToggle] = useState(false)
 
     const [userInput, setUserInput] = useState([])
     
@@ -48,7 +49,7 @@ export default function AttractionsScreen({navigation}) {
             const nearbyRestaurants = apiObject.nearby_restaurants
             setGeneratedFood(nearbyRestaurants)
             // dispatch({type:"SET_GENERATED_RESTAURANTS", food: nearbyRestaurants})
-            console.log(generatedFood)
+            
             
         })
         .then(spawnFood)
@@ -73,7 +74,6 @@ export default function AttractionsScreen({navigation}) {
             const ratingText = restaurant.user_rating.rating_text;
 
             const foodType = restaurant.cuisines
-
             return <Marker 
             key={restaurant.id}
             coordinate={{latitude: foodLat, longitude: foodLong,}}
@@ -82,8 +82,9 @@ export default function AttractionsScreen({navigation}) {
             stopPropagation={true}
             onPress={() => {
                 setUserInput(restaurant)
-                s
-                console.log(userInput)}}
+                spawnRestaurant
+                setCheckToggle(!completeToggle)
+                }}
                     > 
                     <Image
                         source={require('../assets/foodMarker.png')}
@@ -97,8 +98,32 @@ export default function AttractionsScreen({navigation}) {
         }
 
 
+    const spawnRestaurant = () => {
+        
+        console.log(userInput.name)
+        return <View>{ completeToggle ?
+                    <View style={styles.tripCard}>
+                        <TouchableOpacity 
+                            onPress={() => {
+                                console.log("done")
+                                setCheckToggle(!completeToggle)
+                                dispatch({type:"SET_FOOD", food: userInput.name}) }}
+                            
+                            >
+                                <Text style={styles.tripCardText}>Save Attraction:</Text>
+                                <Text style={styles.tripCardText}>📣{userInput.name}📣</Text>
+                        </TouchableOpacity>
+                            
+                        </View>
+                        : <View style={styles.tripCard}>
+                            <Text style={styles.tripCardText}>Choose a New Attraction</Text>
+                        </View>
+        }
+        </View>
+    
+}
 
-function parseJSON(response){
+    const parseJSON = (response) => {
     return response.json()
     }
 
@@ -106,10 +131,7 @@ function parseJSON(response){
     
     return (
         <View style={styles.container}>
-            <View> 
-                <Text>hi</Text>
-                
-            </View>
+            
             <View style={styles.button}>
             
                 <Button
@@ -146,7 +168,7 @@ function parseJSON(response){
                 
             </View>
             <ScrollView style={styles.cards}>
-                
+            {spawnRestaurant()}
             </ScrollView>
         </View>
     )
@@ -184,6 +206,17 @@ const styles = StyleSheet.create({
     },
     coord: {
         padding:10,
+    },
+    tripCardText: {
+        paddingBottom:10,
+        fontSize:26,
+        textShadowColor: "grey",
+        textShadowOffset: {width: 1, height: 1},
+        textShadowRadius: 1,
+    },
+    tripCard: {
+        paddingTop:50,
+        alignItems:"center"
     },
     cards: {
         paddingTop:10,

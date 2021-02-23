@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ImageBackground, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Button, Image, ImageBackground, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler'
 import {Picker} from '@react-native-picker/picker';
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,9 +15,9 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function FavoritesScreen({navigation}) {
     const dispatch = useDispatch();
     // const currentUserID = useSelector(state => state.currentUserID)
-    const currentUserID = 1
-    const currentUser = useSelector(state => state.currrentUser)
-    const userTrips = useSelector(state => state.generatedUserTrips )
+    // const currentUserID = 2
+    const currentUser = useSelector(state => state.currentUser)
+    const userAndTrip = useSelector(state => state.generatedUserObject )
 
     const tripName =  useSelector(state => state.tripName)
 
@@ -28,6 +28,7 @@ export default function FavoritesScreen({navigation}) {
     const endDate = useSelector(state => state.end)
 
     const userDescription = useSelector(state => state.tripDescription)
+    const tripRestaurants = useSelector(state => state.tripRestaurants)
 
     const events =  useSelector(state => state.tripEvents)
     const icon = useSelector(state => state.currentIcon)
@@ -53,12 +54,24 @@ export default function FavoritesScreen({navigation}) {
 function parseJSON(response){
     return response.json()
     }
-//     const getCurrentDate=()=>{
 
-        
 
-//   }
+
+const z = 0
+const spawnUserTrips = () => {
     
+   console.log(userAndTrip)
+    const userTrips = userAndTrip.trips
+    const friend = userAndTrip.friends.map((friend) => friend.username)
+    const userCards = userTrips.map((trip)=>{
+        return <TripCard 
+        trip={trip}
+        friend={friend}
+        key={z+1}
+        />
+        })
+    return userCards
+}
    
 
     const toggleCategory = () => {
@@ -96,7 +109,10 @@ function parseJSON(response){
     const postTrip = () => {
         
         dispatch({type:"SET_DESCRIPTION", description: tripDescription})
-        console.log(tripName, startDate,endDate,tripLat,tripLong,currentUserID, selectedFriendID,userDescription,icon,)
+        const restArray = []
+        restArray.push(tripRestaurants)
+        console.log(tripName, startDate,endDate,tripLat,tripLong, selectedFriendID,userDescription,icon, tripRestaurants,"@", restArray)
+
         fetch(tripsURL, {
             method: "POST",
             headers: {
@@ -110,6 +126,7 @@ function parseJSON(response){
                 endDate: endDate,
                 latitude: tripLat,
                 longitude: tripLong,
+                restaurants: tripRestaurants,
                 user_id: currentUserID,
                 friend_id: selectedFriendID,
                 description: userDescription,
@@ -122,29 +139,19 @@ function parseJSON(response){
         )
         .then(parseJSON)
         .then(showUserTrips)
-        .then(setFinishToggle(!toggleFinish))
+        .then(response => setFinishToggle(!toggleFinish))
         
 
     } 
 
     const finalizeTrip = () => {
         setFinishToggle(!toggleFinish);
-        const currentDay = new Date();
-        const date = new Date().getDate();
-        const month = new Date().getMonth() + 1;
-        const year = new Date().getFullYear();
-  
-        //Alert.alert(date + '-' + month + '-' + year);
-        // You can turn it in to your desired format
-        const todaysDate = date + '-' + month + '-' + year;//format: dd-mm-yyyy;
-        
 
-        
         fetch(usersURL)
             .then(parseJSON)
-            .then(usersObject => {
+            .then(friendsObject => {
                 
-                setSelectableFriends(usersObject)
+                setSelectableFriends(friendsObject)
                 console.log(selectableFriends)
                 })
             .then(spawnFriends)
@@ -162,43 +169,18 @@ function parseJSON(response){
         return friendOptions
     }
 
-    const showUserTrips = () => {
-        fetch(`${usersURL}/${currentUserID}`)
-        .then(parseJSON)
-        .then(userTrips => {
-            const filteredTrips = userTrips.trips
-                
-            
-            console.log(userTrips)
-            dispatch({type:"SET_GENERATED_TRIPS", trips: filteredTrips})
-            // spawnUserTrips
-        })
-        .then(spawnUserTrips)
-    }
-
-    const z = 0
-    const spawnUserTrips = () => {
-        
-        console.log('working')
-        const userCards = userTrips.map((trip)=>{
-            return <TripCard 
-            trip={trip}
-            key={z+1}
-            />
-            })
-        return userCards
-    }
-    const location = `${tripLat},${tripLong}`
+   
+    const location = `${tripLat}, ${tripLong}`
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.unfinishedTrip}>
-                <ImageBackground source={require('../assets/mountain.png')} style={styles.pendingCard}>
-                <Text style={styles.pending}>Pending</Text>
+            <Text style={styles.pending}>Pending Trip:</Text>
+                <Image source={require('../assets/friends.png')} style={styles.pendingCard} />
+                
                     <Text style={styles.pendingText}>Name: {tripName}</Text>
                     <Text style={styles.pendingText}>Where: {location}</Text>
                     <Text style={styles.pendingText}>When: {splitDates(startDate, endDate)}</Text>
-                    
-                </ImageBackground >
+                    <Text style={styles.pendingText}>Attractions: {tripRestaurants}</Text>
             </View>
            
                     <TouchableHighlight style={styles.button} underlayColor='hsl(230, 100%, 100%)' onPress={finalizeTrip}>
@@ -208,8 +190,8 @@ function parseJSON(response){
                         {toggleFinish ? 
                         <View>
                             <ScrollView style={styles.oldTrips}>
-                                <TouchableOpacity onPress={showUserTrips}>
-                                <Text>Upcoming Memories:</Text>
+                                <TouchableOpacity onPress={spawnUserTrips}>
+                                <Text style={styles.upcoming}>Upcoming Memories:</Text>
                                 </TouchableOpacity>
                                 <View>
                                     {spawnUserTrips()}
@@ -293,19 +275,25 @@ const styles= StyleSheet.create({
         backgroundColor: 'hsl(183, 100%, 100%)'
     },
     oldTrips: {
+        
      paddingTop:40,
+     paddingBottom:20,
+     paddingLeft:10,
+     height:"52%"
     },
     newTrips: {
         paddingTop:20,
     },
     unfinishedTrip: {
-        
+        backgroundColor:'hsl(63, 100%, 96%)',
         alignItems: "center",
 
     },pendingCard: {
         backgroundColor:'hsl(58, 100%, 96%)',
         padding:10,
-        borderRadius: 10,
+        height:150,
+        width:240,
+        marginBottom:15,
     
     },
     pending: {
@@ -313,8 +301,8 @@ const styles= StyleSheet.create({
             // bottom: 230,
             // justifyContent: "center",
             // alignItems: "center",
-            fontSize: 30,
-            paddingBottom: 30,
+            fontSize: 26,
+            paddingBottom: 10,
             fontWeight: "700",
             color: 'hsl(181, 59%, 88%)',
             textShadowColor: "black",
@@ -327,15 +315,19 @@ const styles= StyleSheet.create({
         
     },
     pendingText:{
-        color:'hsl(204, 97%, 100%)',
-        textShadowColor: "black",
-        textShadowOffset: {width: 1, height: 1},
-        textShadowRadius: 2,
-        backgroundColor:'hsl(204, 97%, 100%)'
+        color:'hsl(181, 59%, 7%)',
+        // textShadowColor: "black",
+        // textShadowOffset: {width: 1, height: 1},
+        // textShadowRadius: 1,
+        // backgroundColor:'hsl(204, 97%, 100%)',
+        fontSize:19,
+
+        marginBottom:15
     },
     button: {
         paddingVertical: 10,
-        paddingBottom:10,
+        paddingBottom:15,
+        marginBottom:10,
         backgroundColor:'hsl(181, 59%, 94%)',
         alignItems:"center",
         width:'100%'
@@ -347,7 +339,7 @@ const styles= StyleSheet.create({
         
         backgroundColor:'hsl(181, 59%, 94%)',
         alignItems:"center",
-        width:'100%'
+        width:'100%',
         
     },
     buttonText: {
@@ -355,13 +347,13 @@ const styles= StyleSheet.create({
         alignItems:'center'
     },
     selector: {
-        backgroundColor:'hsl(58, 100%, 96%)',
+        // backgroundColor:'hsl(63, 100%, 96%)',
         // paddingLeft:10,
         marginBottom:20,
         
         
     },selectorTwo: {
-        height: '50%',
+        height: '30%',
         width: '100%',
     },
     categories:{
@@ -426,5 +418,8 @@ const styles= StyleSheet.create({
         
         marginBottom:20,
     },
+    upcoming: {
+        fontSize:20
+    }
     
     })

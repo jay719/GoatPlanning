@@ -46,7 +46,7 @@ export default function App() {
             screenOptions={{ headerStyle: { backgroundColor: 'hsl(181, 59%, 95%)' } }}
           >
             <HomeStack.Screen
-              name="SignInScreen"
+              name="Select User"
               component={SignInScreen}
               options= {({navigation}) => ({
                 headerRight: props => < MapHeader navigation={navigation} {...props}/>
@@ -63,7 +63,7 @@ export default function App() {
               
             />
             <HomeStack.Screen 
-              name="Set Date" 
+              name="Nearby Attractions" 
               component={AttractionsScreen}
               
             />
@@ -109,10 +109,8 @@ const  TripStackScreens = () => {
         }
           else if (route.name === 'Camera'){
             return (
-              <Feather name={
-                  focused
-                  ? 'camera'
-                  : 'camera-off'} 
+              <Feather 
+              name={'camera'} 
                   size={size} 
                   color={color} 
                 />
