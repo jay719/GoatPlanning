@@ -19,7 +19,10 @@ export default function MapScreen({navigation}) {
     const startDate = useSelector(state => state.start)
     const endDate = useSelector(state => state.end)
 
-    
+      const currentUserID = useSelector(state => state.currentUserID)
+
+
+    const usersURL = 'https://deploy-trip-planner.herokuapp.com/users'
 
    
     const handleMapPress = (e) => {
@@ -42,14 +45,31 @@ export default function MapScreen({navigation}) {
         dispatch({type:"SET_NAME", name: tripName})
     }
 
+    function parseJSON(response){
+        return response.json()
+        }
+    
 
     const handleSubmit = () => {
-        dispatch({type:"SET_LATITUDE", latitude: latitude})
-        dispatch({type:"SET_LONGITUDE", longitude: longitude})
-        dispatch({type:"SET_NAME", name: tripName})
         
-
-        navigation.navigate("Set Date")
+            fetch(`${usersURL}/${currentUserID}`)
+            .then(parseJSON)
+            .then(userObject => {
+                
+                console.log(currentUserID,"..",userObject)
+                dispatch({type:"SET_GENERATED_USER", userObject: userObject})
+                
+            })
+            .then( response => {
+                dispatch({type:"SET_LATITUDE", latitude: latitude})
+                dispatch({type:"SET_LONGITUDE", longitude: longitude})
+                dispatch({type:"SET_NAME", name: tripName})
+                
+        
+                navigation.navigate("Nearby Attractions")
+            }
+            )
+       
     }    
 
     return (

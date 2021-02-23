@@ -3,7 +3,7 @@ import React,  { useState} from 'react'
 import {ImageBackground, SafeAreaView, StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal} from "react-native" //safe area makes sure content is under tool bar
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function SignInScreen({navigation}) {
@@ -11,19 +11,35 @@ export default function SignInScreen({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
+    const [toggleSignInMessage, setToggleSignInMessage] = useState(true)
+    const currentUserID = useSelector(state => state.currentUserID)
+    // const currentUserID = 2
+    const userAndTrip = useSelector(state => state.generatedUserObject )
 
-    const [toggleSignInMessage, settoggleSignInMessage] = useState(true)
+    const usersURL = 'https://deploy-trip-planner.herokuapp.com/users'
 
+        const handleUsernameText = (text) => {
+            setUsernameValue(text)
+        }
 
-const handleUsernameText = (text) => {
-    setUsernameValue(text)
-}
-const handlePasswordText = (text) => {                //usually would be event and event.target.value
-    setPasswordValue(text)
-}   
+    const handlePasswordText = (text) => {                //usually would be event and event.target.value
+        setPasswordValue(text)
+    }   
 
-spawnLogInMessage = () => {
-    settoggleSignInMessage(!toggleSignInMessage)
+    function parseJSON(response){
+        return response.json()
+        }
+
+    const findUserAndTrips = () => {
+        fetch(`${usersURL}/${currentUserID}`)
+        .then(parseJSON)
+        .then(userObject => {
+            
+            console.log(userObject)
+            dispatch({type:"SET_GENERATED_USER", userObject: userObject})
+            
+        })
+    
 }
     return (
         
@@ -67,7 +83,7 @@ spawnLogInMessage = () => {
                             style={{ ...styles.openButton }}
                             
                             >
-                                {spawnLogInMessage}
+                                
                                 <Text 
                                 style={styles.textStyle}
                                 onPress={() => {
@@ -88,15 +104,18 @@ spawnLogInMessage = () => {
                                             if (data.message) {
                                                 setError(data.message)
                                             } else {
-                                                {spawnLogInMessage}
+                                                
                                                 dispatch({type:"SET_CURRENT_ID",currentID: data.user.id})
                                                 dispatch({type:"SET_CURRENT_USER", currentUser: data.user.username})
+                                                dispatch({type:"SET_CURRENT_ID",currentID: data.user.id})
                                                 
                                             }
 
                                         })
+                                        .then(findUserAndTrips)
                                         .then(setModalVisible(false))
-                                        .then(navigation.navigate("Trip Planner"))
+                                        .then(findUserAndTrips)
+                                        .then(navigation.navigate("G.O.A.T Planning"))
                                         
                                 }}
                                 >
@@ -132,8 +151,8 @@ const styles = StyleSheet.create({
     },
     welcome:{
         flex: 1,
-        top:"50%",
-        left:"50%"
+        top:"38%",
+        left:"40%"
     },
     welcomeText: {
         left: 30,
