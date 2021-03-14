@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function SignInScreen({navigation}) {
     const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
+    const [modal2Visible, setModal2Visible] = useState(false);
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
-    const [toggleSignInMessage, setToggleSignInMessage] = useState(true)
+  
     const currentUserID = useSelector(state => state.currentUserID)
     // const currentUserID = 2
     const userAndTrip = useSelector(state => state.generatedUserObject )
@@ -67,11 +68,6 @@ export default function SignInScreen({navigation}) {
                             value={usernameValue}
                             placeholder="Username"
                             />
-                            {toggleSignInMessage ? 
-                                <Text></Text>
-                                :
-                                <Text>Signed In!!</Text>
-                            }
                              <TextInput
                                 style={{ borderColor: 'gray', borderWidth: 1, margin:20, height:28}}
                                 secureTextEntry={true}
@@ -126,7 +122,62 @@ export default function SignInScreen({navigation}) {
                         </View>
                 </Modal>
                     
-                    
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    }}
+                    >
+                        <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Please Sign up:</Text>
+                            <TextInput
+                            style={{ borderColor: 'gray', borderWidth: 1, margin:20, height:28 }}
+                            onChangeText={handleUsernameText}
+                            value={usernameValue}
+                            placeholder="Username"
+                            />
+                             <TextInput
+                                style={{ borderColor: 'gray', borderWidth: 1, margin:20, height:28}}
+                                secureTextEntry={true}
+                                onChangeText={handlePasswordText}
+                                value={passwordValue}
+                                placeholder="Password"
+                            /> 
+                            <TouchableOpacity
+                            style={{ ...styles.openButton }}
+                            
+                            >
+                                
+                                <Text 
+                                style={styles.textStyle}
+                                onPress={() => {
+                                    fetch('http://deploy-trip-planner.herokuapp.com/users', {
+                                        method: "POST",
+                                        headers: {
+                                            'Content-Type': 'application/json'
+
+                                        },
+                                        body: JSON.stringify({
+                                            username: usernameValue,
+                                            password: passwordValue
+                                        })
+                                    })
+                                        
+                                        .then(setModal2Visible(false))
+                                        
+                                        
+                                        
+                                }}
+                                >
+                                    Submit Account Information
+                                    </Text>
+                            </TouchableOpacity>
+                        </View>
+                        </View>
+                        </Modal>
                     
                     <View style={styles.loginButton}>
                         <TouchableOpacity style={styles.buttons} onPress={() => {setModalVisible(true)}} color={'hsl(181, 59%, 94%)'}>
@@ -134,7 +185,7 @@ export default function SignInScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.registerButton}>
-                        <TouchableOpacity style={styles.button} >
+                        <TouchableOpacity style={styles.button} onPress={() => {setModal2Visible(true)}} >
                             <Text style={styles.signUpButtonText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
