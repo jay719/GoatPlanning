@@ -125,7 +125,7 @@ export default function SignInScreen({navigation}) {
                 <Modal
                     animationType="slide"
                     transparent={true}
-                    visible={modalVisible}
+                    visible={modal2Visible}
                     onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                     }}
