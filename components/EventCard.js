@@ -35,7 +35,6 @@ export default function EventCard({event, index}) {
                         <Text style={styles.date}>⏳{event.dates.start.localDate}⏳</Text>
                         <Text style={styles.location}>🗺Location: {event._embedded.venues[0].name}🗺</Text>
                     </View>
-            
             <View style={styles.infoContainer}>
                 <View style={styles.attraction}>
                     <Text>Performing:</Text>
@@ -45,7 +44,6 @@ export default function EventCard({event, index}) {
             <TouchableOpacity style={styles.button} onPress={handleClickedEvent} >
                 <Text style={styles.buttonText}>Add Event To Trip</Text>
             </TouchableOpacity>
-           
             </ImageBackground> 
         </View>
     )
