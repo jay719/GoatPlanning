@@ -8,51 +8,39 @@ import {
     Linking,
     ImageBackground
 } from 'react-native'
+
 import { useDispatch, useSelector } from 'react-redux'
-
-
-{/* <Image style={styles.cardImage} source={{url: event.images[2].url}} /> */}
 export default function EventCard({event, index}) {
+    const dispatch = useDispatch();
+    const eimage = {uri:event.images[2].url}
     const eventName = useSelector(state => state.selectedEventsName)
-    
     const handleClickedEvent = () => {
-        
         dispatch({type:"SET_EVENT_NAME", eventName: event.name})
         console.log(event)
     }
-
-
-    const dispatch = useDispatch();
-    
-
     const showAtractions = (event) => {
-        
         const attractions = event._embedded.attractions.map(attraction => {
             return <Text key={attraction.name} style={styles.attraction}>🌟{attraction.name}</Text>
         })
         return attractions
     }
-    const eimage = {uri:event.images[2].url}
+    
     return (
         
         <View style={styles.container}>
             <ImageBackground source={eimage} style={styles.card} blurRadius={0.7} >
-            
                     <View style={styles.headerContainer}>
                         <Text style={styles.names}>{index}.{event.name}</Text>
                         <Text style={styles.genre}>📣{event.classifications[0].segment.name}: {event.classifications[0].genre.name}📣 </Text>
                         <Text style={styles.date}>⏳{event.dates.start.localDate}⏳</Text>
                         <Text style={styles.location}>🗺Location: {event._embedded.venues[0].name}🗺</Text>
-               
                     </View>
             
             <View style={styles.infoContainer}>
-        
                 <View style={styles.attraction}>
                     <Text>Performing:</Text>
                     {showAtractions(event)}
                 </View>
-                
             </View>
             <TouchableOpacity style={styles.button} onPress={handleClickedEvent} >
                 <Text style={styles.buttonText}>Add Event To Trip</Text>
