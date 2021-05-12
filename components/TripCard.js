@@ -26,14 +26,11 @@ export default function TripCard({trip, friend}) {
                 return  <FontAwesome name="question-circle" size={24} color="green" style={styles.choiceIcon} />
             }
             else return <Text>"N/A"</Text>
-           
         } 
-        
         const viewTrip = () => {
             setModalVisible(!modalVisible)
     
         }
-        
         const showUpdates = () => {
             const updates = trip.updates.map(update => {
                 return <Text style={styles.updatesText}>{update}</Text>
@@ -44,7 +41,6 @@ export default function TripCard({trip, friend}) {
 
     return (
         <View style={styles.container}>
-            
             <View style={styles.header}>
                 {showIcon()}
                 <Text style={styles.name}>Trip: {trip.name}- </Text>
