@@ -18,12 +18,6 @@ export default function CalendarScreen({navigation}) {
     const endDate = useSelector(state => state.end)
     
     const handleClick = () => {
-        
-        
-
-        
-        
-
         dispatch({type:"SET_START", start: selectedStartDate});
         dispatch({type:"SET_END", end: selectedEndDate });
         navigation.navigate("Map")

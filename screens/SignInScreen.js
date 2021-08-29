@@ -1,6 +1,7 @@
 
 import React,  { useState} from 'react'
 import {ImageBackground, SafeAreaView, StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal} from "react-native" //safe area makes sure content is under tool bar
+import backgroundImg from '../assets/goatmaps.png';    
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,10 +47,10 @@ export default function SignInScreen({navigation}) {
         
             <ImageBackground 
             style={styles.background}
-            source={require('../assets/roadtrip.png')}
+            source={require()}
             >
                   <View style={styles.welcome}>
-                      <Image source={require('../assets/goatmaps.png')} style={styles.image}/>
+                      <Image source={backgroundImg} style={styles.image}/>
                     </View>
                 <Modal
                     animationType="slide"

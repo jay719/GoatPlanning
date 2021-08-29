@@ -56,7 +56,7 @@ export default function MapScreen({navigation}) {
             .then(parseJSON)
             .then(userObject => {
                 
-                console.log(currentUserID,"..",userObject)
+                // console.log(currentUserID,"..",userObject)
                 dispatch({type:"SET_GENERATED_USER", userObject: userObject})
                 
             })
