@@ -26,10 +26,7 @@ import { LogBox } from 'react-native';
 const HomeStack = createStackNavigator();
 const TripTabs = createBottomTabNavigator();
 
-const store = createStore(reducers)
-
-
-
+const store = createStore(reducers);
 // Ignore log notification by message
 LogBox.ignoreLogs(['Warning: ...']);
 
