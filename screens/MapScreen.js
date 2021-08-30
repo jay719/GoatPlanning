@@ -15,13 +15,13 @@ export default function MapScreen({navigation}) {
     
     const [tripName, setTripName] = useState('')
     
-    
+
     const startDate = useSelector(state => state.start)
     const endDate = useSelector(state => state.end)
 
       const currentUserID = useSelector(state => state.currentUserID)
 
-
+    console.log(currentUserID)
     const usersURL = 'https://deploy-trip-planner.herokuapp.com/users'
 
    
@@ -71,6 +71,33 @@ export default function MapScreen({navigation}) {
             )
        
     }    
+
+
+    useEffect(() => {
+        const findUserAndTrips = () => {
+            if (Number.isNaN(currentUserID) === false) {
+                console.log('successful')
+                fetch(`${usersURL}/${currentUserID}`)
+                .then(parseJSON)
+                .then(userObject => {
+                    console.log('userURL',`${usersURL}/${currentUserID}`)
+                    console.log('keys',Object.keys(userObject))
+                    dispatch({type:"SET_GENERATED_USER", userObject: userObject})
+                    // setTimeout(() => {
+                    //     console.log("hi",userObject)
+                    //     dispatch({type:"SET_GENERATED_USER", userObject: userObject})
+                    //   }, 5000)
+                    })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    });
+                } else {
+                        console.log('loading')
+                    }
+            };
+        findUserAndTrips();
+
+    }, [currentUserID])
 
     return (
         

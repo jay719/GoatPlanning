@@ -1,9 +1,9 @@
 
-import React,  { useState} from 'react'
+import React,  { useEffect, useState} from 'react'
 import {ImageBackground, SafeAreaView, StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal} from "react-native" //safe area makes sure content is under tool bar
-import backgroundImg from '../assets/goatmaps.png';    
+import backgroundImg from '../assets/roadtrip.png';
+import goatImg from '../assets/goatmaps.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -13,8 +13,11 @@ export default function SignInScreen({navigation}) {
     const [modal2Visible, setModal2Visible] = useState(false);
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
-  
-    const currentUserID = useSelector(state => state.currentUserID)
+    const [error, setError] = useState('');
+    const token = {"error": "Not one of ussss"}
+    const backgroundImgUri = Image.resolveAssetSource(backgroundImg).uri
+    const goatImgUri = Image.resolveAssetSource(goatImg).uri
+    const [currentUserID, setUserId] = useState('')
     // const currentUserID = 2
     const userAndTrip = useSelector(state => state.generatedUserObject )
 
@@ -28,29 +31,21 @@ export default function SignInScreen({navigation}) {
         setPasswordValue(text)
     }   
 
-    function parseJSON(response){
+    const parseJSON = (response) => {
+        console.log(usernameValue, passwordValue)
         return response.json()
         }
 
-    const findUserAndTrips = () => {
-        fetch(`${usersURL}/${currentUserID}`)
-        .then(parseJSON)
-        .then(userObject => {
-            
-            console.log(userObject)
-            dispatch({type:"SET_GENERATED_USER", userObject: userObject})
-            
-        })
-    
-}
+        
+        
     return (
         
             <ImageBackground 
             style={styles.background}
-            source={require()}
+            source={{uri:"https://github.com/jay719/FlatironCapstone/blob/main/assets/foodMarker.png"}}
             >
                   <View style={styles.welcome}>
-                      <Image source={backgroundImg} style={styles.image}/>
+                      <Image source={{uri: goatImgUri}} style={styles.image}/>
                     </View>
                 <Modal
                     animationType="slide"
@@ -95,13 +90,15 @@ export default function SignInScreen({navigation}) {
                                             password: passwordValue
                                         })
                                     })
-                                        .then( response => response.json())
+                                        .then(parseJSON)
                                         .then(data => {
-                                            console.log('token', data)
-                                            if (data.message) {
-                                                setError(data.message)
+                                            // console.log('token', data)
+                                            if (data.error) {
+                                                setError(data.error)
                                             } else {
                                                 
+                                                AsyncStorage.setItem('token', data.token)
+                                                setUserId({currentID: data.user.id}) 
                                                 dispatch({type:"SET_CURRENT_ID",currentID: data.user.id})
                                                 dispatch({type:"SET_CURRENT_USER", currentUser: data.user.username})
                                                 dispatch({type:"SET_CURRENT_ID",currentID: data.user.id})
@@ -109,15 +106,23 @@ export default function SignInScreen({navigation}) {
                                             }
 
                                         })
-                                        .then(findUserAndTrips)
+                                        .catch((error) => {
+                                            console.error('Error:', error);
+                                          })
                                         .then(setModalVisible(false))
-                                        .then(findUserAndTrips)
+                                        // .then(setTimeout(() => {
+                                            
+                                        // }))
                                         .then(navigation.navigate("G.O.A.T Planning"))
                                         
                                 }}
                                 >
                                     Submit Sign in
                                     </Text>
+                                    { error
+                                        ? <Text>{error}</Text>
+                                        : null
+                                    }
                             </TouchableOpacity>
                         </View>
                         </View>
@@ -179,7 +184,6 @@ export default function SignInScreen({navigation}) {
                         </View>
                         </View>
                         </Modal>
-                    
                     <View style={styles.loginButton}>
                         <TouchableOpacity style={styles.buttons} onPress={() => {setModalVisible(true)}} color={'hsl(181, 59%, 94%)'}>
                             <Text style={styles.loginButtonText}>Sign In</Text>
@@ -190,6 +194,7 @@ export default function SignInScreen({navigation}) {
                             <Text style={styles.signUpButtonText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
+
             </ImageBackground>
         
     )
@@ -199,7 +204,8 @@ const styles = StyleSheet.create({
 
     background: {
         flex: 1,
-        
+        zIndex: 5,
+    
     },
     welcome:{
         flex: 1,

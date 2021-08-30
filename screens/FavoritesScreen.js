@@ -58,10 +58,10 @@ function parseJSON(response){
 
 
 const z = 0
-const spawnUserTrips = () => {
+const spawnUserTrips = (userAndTrip) => {
     
-   console.log(userAndTrip)
-    const userTrips = userAndTrip.trips
+   console.log("usertrip", userAndTrip)
+    const userTrips = userAndTrip.trips;
     const friend = userAndTrip.friends.map((friend) => friend.username)
     const userCards = userTrips.map((trip)=>{
         return <TripCard 
@@ -194,7 +194,7 @@ const spawnUserTrips = () => {
                                 <Text style={styles.upcoming}>Upcoming Memories:</Text>
                                 </TouchableOpacity>
                                 <View>
-                                    {spawnUserTrips()}
+                                    {spawnUserTrips(userAndTrip)}
                                 </View>
                             </ScrollView>
 
