@@ -2,7 +2,7 @@
 import React,  { useEffect, useState} from 'react'
 import {ImageBackground, SafeAreaView, StyleSheet, View, Image, TextInput, Text, TouchableOpacity, Modal} from "react-native" //safe area makes sure content is under tool bar
 import backgroundImg from '../assets/roadtrip.png';
-import goatImg from '../assets/goatmaps.png';
+;
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,11 +14,7 @@ export default function SignInScreen({navigation}) {
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
     const [error, setError] = useState('');
-    const token = {"error": "Not one of ussss"}
-    const backgroundImgUri = Image.resolveAssetSource(backgroundImg).uri
-    const goatImgUri = Image.resolveAssetSource(goatImg).uri
     const [currentUserID, setUserId] = useState('')
-    // const currentUserID = 2
     const userAndTrip = useSelector(state => state.generatedUserObject )
 
     const usersURL = 'https://deploy-trip-planner.herokuapp.com/users'
@@ -35,17 +31,15 @@ export default function SignInScreen({navigation}) {
         console.log(usernameValue, passwordValue)
         return response.json()
         }
-
-        
         
     return (
         
             <ImageBackground 
             style={styles.background}
-            source={{uri:"https://github.com/jay719/FlatironCapstone/blob/main/assets/foodMarker.png"}}
+            source={{uri: "https://raw.githubusercontent.com/jay719/FlatironCapstone/main/assets/roadtrip.png"}}
             >
                   <View style={styles.welcome}>
-                      <Image source={{uri: goatImgUri}} style={styles.image}/>
+                      <Image source={{uri: "https://github.com/jay719/FlatironCapstone/blob/main/assets/goatmaps.png?raw=true"}} style={styles.image}/>
                     </View>
                 <Modal
                     animationType="slide"
@@ -205,7 +199,6 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         zIndex: 5,
-    
     },
     welcome:{
         flex: 1,
